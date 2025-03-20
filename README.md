@@ -8,7 +8,7 @@ Run `make`, and it will produce an executable called `interpreter`.
 
 Running the executable, it will prompt you for input, and the formatting is as follows:
 
-The morse code sequences must be delimited with a space in order to be recognised, e.g. `.... . .-.. .-.. ----`, and spaces can be written using `/` in between these sequences.
+The morse code sequences must be delimited with a space in order to be recognised, e.g. `.... . .-.. .-.. ---`, and spaces can be written using `/` in between these sequences.
 
 ## Notes:
 

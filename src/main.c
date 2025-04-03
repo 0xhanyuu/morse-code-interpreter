@@ -14,10 +14,11 @@
  * number of characters possible, and that being any character that takes a single dot or dash.
  *
  * Morse code sequences have to be delimited in order to be parsed correctly, and the most -
- * characters that can be stored, using the least space possible, is half of the input size.
+ * characters that can be stored, using the least space possible, is 2/3rds of the input size.
  * e.g. ". ." - Input size of 3.
  *      "ee" - Output size of 2. 
  */
+
 
 /*
 Can be implemented for more direct indexing of characters.
@@ -33,8 +34,10 @@ typedef enum morse_index
 morse_index;
 */
 
+
 const char * morse_tokens[] =
 {
+	// Letters.
 	".-", "-...", "-.-.", "-..",
 	".", "..-.", "--.", "....",
 	"..", ".---", "-.-", ".-..",
@@ -42,6 +45,10 @@ const char * morse_tokens[] =
 	"--.-", ".-.", "...", "-",
 	"..-", "...-", ".--", "-..-",
 	"-.--", "--.."
+	// Numbers.
+	"-----", ".----", "..---", "...--",
+	"....-", ".....", "-....", "--...",
+	"---..", "----." 
 };
 
 void interpreter(char * input, char * output)
@@ -58,8 +65,9 @@ void interpreter(char * input, char * output)
 	{
 		// Default to '?' for unparsable characters.
 		char decoded_character = '?';
-		
-		for ( int i = 0; i < 26; i++ )
+	
+		// 'i < 36' for the alphabet (26) + the numbers (10).
+		for ( int i = 0; i < 36; i++ )
 		{
 			if ( strcmp(tokenised_input, "/") == 0 )
 			{
@@ -71,6 +79,16 @@ void interpreter(char * input, char * output)
 			// set the decoded character, and break from the loop.
 			if ( strcmp(tokenised_input, morse_tokens[i]) == 0 )
 			{
+				// If the length is 5, we can assume it is a number.
+				if ( strlen(tokenised_input) == 5 )
+				{
+					// The index is the number,
+					// the start of the number ascii is 48.
+					decoded_character = i - 26 + 49;
+					// Break in order to not be overriden by the next char statement.
+					break;
+				}
+
 				decoded_character = i + 97;
 				// Alternatively, this statement can be used in order to -
 				// make all of the characters uppercase.

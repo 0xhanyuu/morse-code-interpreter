@@ -44,15 +44,37 @@ const char * morse_tokens[] =
 	"--", "-.", "---", ".--.",
 	"--.-", ".-.", "...", "-",
 	"..-", "...-", ".--", "-..-",
-	"-.--", "--.."
+	"-.--", "--..",
 	// Numbers.
 	"-----", ".----", "..---", "...--",
 	"....-", ".....", "-....", "--...",
 	"---..", "----." 
 };
 
-void interpreter(char * input, char * output)
+typedef enum intcall
 {
+	intext = 99,
+	intres = 100
+}
+intcall;
+
+char input[INPUT_SIZE];
+char output[OUTPUT_SIZE];
+
+intcall interpreter(char * input, char * output)
+{
+	// An 'interpreter call' to remain within the loop,
+	// and input as many times as the user wishes,
+	// until the user sends 'quit' into the input.
+	intcall call0 = intres;
+	
+	printf("%s", "// send //\n");
+	// Will only take as many bytes as INPUT_SIZE.
+	// Refer to notes at the top to increase the size of the input if needed.
+	fgets(input, INPUT_SIZE, stdin);
+	// Remove trailing newline from the input, produced by fgets().
+	input[strcspn(input, "\n")] = 0;
+
 	// A zero-instantiated (for sanity) buffer in order to copy the data to output.
 	char output_temp[OUTPUT_SIZE] = {0};
 	// An iterator to properly store the output characters consecutively.
@@ -63,6 +85,8 @@ void interpreter(char * input, char * output)
 
 	while ( tokenised_input != NULL ) 
 	{
+		if ( strcmp(tokenised_input, "quit") == 0 ) { call0 = intext; return call0; }
+
 		// Default to '?' for unparsable characters.
 		char decoded_character = '?';
 	
@@ -79,11 +103,12 @@ void interpreter(char * input, char * output)
 			// set the decoded character, and break from the loop.
 			if ( strcmp(tokenised_input, morse_tokens[i]) == 0 )
 			{
-				// If the length is 5, we can assume it is a number.
+				// If the input matches a token and has a length of 5,
+				// we can assume it is a number.
 				if ( strlen(tokenised_input) == 5 )
 				{
-					// The index is the number,
-					// the start of the number ascii is 48.
+					// The start of the list of numbers in ASCII is at 48.
+					// 'i' starts counting at 0.
 					decoded_character = i - 26 + 49;
 					// Break in order to not be overriden by the next char statement.
 					break;
@@ -105,24 +130,30 @@ void interpreter(char * input, char * output)
 		tokenised_input = strtok(NULL, " ");
 	}
 
-	// Return the output string.
-	memcpy(output, output_temp, 32);
+	// Return the output string and print to stdout.
+	memcpy(output, output_temp, OUTPUT_SIZE);
+	printf("%s", "// recv //\n");
+	printf("%s\n", output);
+	// Print a spacer for readability.
+	printf("%s", "\n\n");
+
+	return call0;
 }
 
 int main(void)
 {
-	char input[INPUT_SIZE];
-	// Will only take as many bytes as INPUT_SIZE.
-	// Refer to notes at the top to increase the size of the input if needed.
-	fgets(input, INPUT_SIZE, stdin);
+	printf(
+	"%s", "    //=================================//\n"
+	      "   // hanyuu's Morse Code Interpreter //\n"
+	      "  // To leave at any time,           //\n"
+	      " // send 'quit' into the terminal.  //\n"
+	      "//=================================//\n\n");
 
-	// Remove trailing newline from the input, produced by fgets().
-	input[strcspn(input, "\n")] = 0;
-
-	char output[OUTPUT_SIZE];
-	interpreter(input, output);
-
-	printf("%s\n", output);
-
+	intcall _call0 = intext;
+	// While the interpreter function does not return a call to exit,
+	// do nothing and keep running it.
+	// The function will terminate itself naturally when the user sends 'quit'.
+	while ( interpreter(input, output) != _call0 ) { (void)0; }
+	
 	return 0;
 }

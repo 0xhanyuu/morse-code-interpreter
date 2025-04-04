@@ -1,6 +1,6 @@
 # morse code interpreter
 
-A simple piece of software that takes morse code input, parses it, and produces plaintext output. 
+A simple piece of software that takes a morse code sequence as input, parses it, and produces plaintext output. 
 
 ## Usage:
 
@@ -19,3 +19,5 @@ The morse code sequences must be delimited with a space in order to be recognise
 - Any erroneous output will be caught and padded with a `?` character.
 
 - The program will now continue to prompt for input until the user explicitly sends `quit` to terminate the program, allowing to send many morse code sequences to translate after another without inconvenience.
+
+- Constants for controlling the input / output size have been embedded into the program and can be changed by the user to allow translation of extremely large excerpts / sequences if needed. Refer to `src/main.c` for more information.

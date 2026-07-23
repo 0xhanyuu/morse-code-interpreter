@@ -14,10 +14,14 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 
 all: $(TARGET) 
 
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
 clean:
-	rm -f $(TARGET) ${OBJS}
+	rm -rfv $(TARGET) ${OBJS}
+	rmdir -v $(OBJDIR)
 
 .PHONY: clean

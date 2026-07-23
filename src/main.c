@@ -68,7 +68,7 @@ intcall interpreter(char * input, char * output)
 	// until the user sends 'quit' into the input.
 	intcall call0 = intres;
 	
-	printf("%s", "// send //\n");
+	printf("%s", "// tx //\n");
 	// Will only take as many bytes as INPUT_SIZE.
 	// Refer to notes at the top to increase the size of the input if needed.
 	fgets(input, INPUT_SIZE, stdin);
@@ -132,7 +132,7 @@ intcall interpreter(char * input, char * output)
 
 	// Return the output string and print to stdout.
 	memcpy(output, output_temp, OUTPUT_SIZE);
-	printf("%s", "// recv //\n");
+	printf("%s", "// rx //\n");
 	printf("%s\n", output);
 	// Print a spacer for readability.
 	printf("%s", "\n\n");
